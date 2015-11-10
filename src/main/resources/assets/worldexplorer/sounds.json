@@ -1,0 +1,50 @@
+{
+	"slingshot_pull_1":
+	{
+		"category": "master","sounds": [{"name": "slingshot_pull_1","stream": false}]
+	}
+	,"slingshot_release_1":
+	{
+		"category": "master","sounds": [{"name": "slingshot_release_1","stream": false}]
+	}
+	,"pebble_hit_1":
+	{
+		"category": "master","sounds": [{"name": "pebble_hit_1","stream": false}]
+	}
+	,"boomerang_swoosh":
+	{
+		"category": "master","sounds": [{"name": "boomerang_swoosh","stream": false}]
+	}
+	,"boomerang_catch":
+	{
+		"category": "master","sounds": [{"name": "boomerang_catch","stream": false}]
+	}
+	,"longbow_draw_1":
+	{
+		"category": "master","sounds": [{"name": "longbow_draw_1","stream": false}]
+	}
+	,"whip_swing":
+	{
+		"category": "master","sounds": [{"name": "whip_swing","stream": false}]
+	}
+	,"whip_snap":
+	{
+		"category": "master","sounds": [{"name": "whip_snap","stream": false}]
+	}
+	,"blowpipe_breathe1":
+	{
+		"category": "master","sounds": [{"name": "blowpipe_breathe1","stream": false}]
+	}
+	,"blowpipe_blow1":
+	{
+		"category": "master","sounds": [{"name": "blowpipe_blow1","stream": false}]
+	}
+	,"blowpipe_blow2":
+	{
+		"category": "master","sounds": [{"name": "blowpipe_blow2","stream": false}]
+	}
+	,"blowpipe_blow3":
+	{
+		"category": "master","sounds": [{"name": "blowpipe_blow3","stream": false}]
+	}
+}
