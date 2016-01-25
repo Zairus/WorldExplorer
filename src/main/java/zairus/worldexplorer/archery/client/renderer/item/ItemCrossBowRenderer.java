@@ -1,21 +1,21 @@
 package zairus.worldexplorer.archery.client.renderer.item;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-
 import zairus.worldexplorer.archery.client.model.ModelCrossBow;
-import zairus.worldexplorer.archery.items.CrossBow;
 import zairus.worldexplorer.core.ClientProxy;
 import zairus.worldexplorer.core.helpers.ColorHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ItemCrossBowRenderer
@@ -28,7 +28,8 @@ public class ItemCrossBowRenderer
 	private static final RenderItem renderItem = new RenderItem();
 	
 	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+	public boolean handleRenderType(ItemStack item, ItemRenderType type)
+	{
 		return (
 				type.equals(IItemRenderer.ItemRenderType.EQUIPPED)) 
 				|| (type.equals(IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON)) 
@@ -37,14 +38,24 @@ public class ItemCrossBowRenderer
 	}
 	
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+	{
 		return (
 				helper.equals(IItemRenderer.ItemRendererHelper.ENTITY_BOBBING)) 
 				|| (helper.equals(IItemRenderer.ItemRendererHelper.ENTITY_ROTATION));
 	}
 	
 	@Override
-	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+	public void renderItem(ItemRenderType type, ItemStack stack, Object... data)
+	{
+		EntityLivingBase entity = null;
+		
+		if(data.length > 1)
+		{
+			if (data[1] instanceof EntityLivingBase)
+				entity = (EntityLivingBase) data[1];
+		}
+		
 		if (mc == null)
 		{
 			mc = ClientProxy.mc;
@@ -62,9 +73,27 @@ public class ItemCrossBowRenderer
 			float angleY = 0.0F;
 			float angleZ = 210.0F;
 			
-			CrossBow crossBowItem = (CrossBow)stack.getItem();
+			boolean flag = false;
+			float stagePercent = 0.0f;
 			
-			if ((type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) && (crossBowItem.getUseTick() > 0))
+			if (entity != null && entity instanceof EntityPlayer)
+			{
+				EntityPlayer player = (EntityPlayer)entity;
+				
+				if (player.getItemInUse() != null)
+				{
+					flag = true;
+					
+					float maxUse = 20.0f;
+					int useCount = stack.getItem().getMaxItemUseDuration(stack) - player.getItemInUseCount();
+					
+					stagePercent = (float)useCount / maxUse;
+					if (stagePercent > 1.0f)
+						stagePercent = 1.0f;
+				}
+			}
+			
+			if ((type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) && flag)
 			{
 				angleY -= 90.0F;
 				angleZ -= 90.0F;
@@ -79,7 +108,7 @@ public class ItemCrossBowRenderer
 			GL11.glRotatef(angleZ, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(angleY, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(offsetX, offsetY, offsetZ);
-			crossBowModel.setStage(crossBowItem.getStagePercent(stack));
+			crossBowModel.setStage(stagePercent);
 			crossBowModel.render((Entity)data[1], 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			GL11.glTranslatef(offsetX * -1, offsetY * -1, offsetZ * -1);
 			GL11.glRotatef(angleY * -1, 0.0F, 1.0F, 0.0F);

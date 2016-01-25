@@ -16,8 +16,6 @@ import zairus.worldexplorer.core.WorldExplorer;
 public class CrossBow
 	extends WEItemRanged
 {
-	private int useTick = 0;
-	
 	public CrossBow()
 	{
 		super();
@@ -57,8 +55,6 @@ public class CrossBow
 		
 		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, j);
 		MinecraftForge.EVENT_BUS.post(event);
-		
-		useTick = 0;
 		
 		if (event.isCanceled())
 		{
@@ -134,34 +130,6 @@ public class CrossBow
 	@Override
 	public int getMaxItemUseDuration(ItemStack duration)
 	{
-		return 7200;
-	}
-	
-	@Override
-	public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
-	{
-		++useTick;
-	}
-	
-	public int getUseTick()
-	{
-		return useTick;
-	}
-	
-	public float getStagePercent(ItemStack stack)
-	{
-		float percent = 0.0F;
-		float maxTime = 70;
-		
-		if (useTick < maxTime)
-		{
-			percent = (float)useTick / maxTime;
-		}
-		else
-		{
-			percent = 1.0F;
-		}
-		
-		return percent;
+		return 5200;
 	}
 }

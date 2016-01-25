@@ -1,21 +1,21 @@
 package zairus.worldexplorer.archery.client.renderer.item;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-
 import zairus.worldexplorer.archery.client.model.ModelBlowPipe;
-import zairus.worldexplorer.archery.items.BlowPipe;
 import zairus.worldexplorer.core.ClientProxy;
 import zairus.worldexplorer.core.helpers.ColorHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ItemBlowPipeRenderer
@@ -28,7 +28,8 @@ public class ItemBlowPipeRenderer
 	private static final RenderItem renderItem = new RenderItem();
 	
 	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+	public boolean handleRenderType(ItemStack item, ItemRenderType type)
+	{
 		return (
 				type.equals(IItemRenderer.ItemRenderType.EQUIPPED)) 
 				|| (type.equals(IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON)) 
@@ -37,14 +38,24 @@ public class ItemBlowPipeRenderer
 	}
 	
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+	{
 		return (
 				helper.equals(IItemRenderer.ItemRendererHelper.ENTITY_BOBBING)) 
 				|| (helper.equals(IItemRenderer.ItemRendererHelper.ENTITY_ROTATION));
 	}
 	
 	@Override
-	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+	public void renderItem(ItemRenderType type, ItemStack stack, Object... data)
+	{
+		EntityLivingBase entity = null;
+		
+		if(data.length > 1)
+		{
+			if (data[1] instanceof EntityLivingBase)
+				entity = (EntityLivingBase) data[1];
+		}
+		
 		if (mc == null)
 		{
 			mc = ClientProxy.mc;
@@ -63,7 +74,18 @@ public class ItemBlowPipeRenderer
 			
 			if (type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON)
 			{
-				if (((BlowPipe)stack.getItem()).getUseTick() > 0)
+				boolean flag = false;
+				
+				if (entity instanceof EntityPlayer)
+				{
+					EntityPlayer player = (EntityPlayer)entity;
+					if (player.getItemInUse() != null)
+					{
+						flag = true;
+					}
+				}
+				
+				if (flag)
 				{
 					angle -= 90.0F;
 					offsetY -= 0.5;

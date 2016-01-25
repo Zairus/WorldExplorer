@@ -17,8 +17,6 @@ import zairus.worldexplorer.core.WorldExplorer;
 public class BlowPipe
 	extends WEItemRanged
 {
-	private int useTick = 0;
-	
 	public BlowPipe()
 	{
 		super();
@@ -53,8 +51,6 @@ public class BlowPipe
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useCount)
 	{
 		int j = this.getMaxItemUseDuration(stack) - useCount;
-		
-		useTick = 0;
 		
 		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, j);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -106,16 +102,5 @@ public class BlowPipe
 	public int getMaxItemUseDuration(ItemStack duration)
 	{
 		return 3000;
-	}
-	
-	@Override
-	public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
-	{
-		++useTick;
-	}
-	
-	public int getUseTick()
-	{
-		return useTick;
 	}
 }

@@ -32,7 +32,8 @@ public class ItemWhipRenderer
 	private static final RenderItem renderItem = new RenderItem();
 	
 	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+	public boolean handleRenderType(ItemStack item, ItemRenderType type)
+	{
 		return (
 				type.equals(IItemRenderer.ItemRenderType.EQUIPPED)) 
 				|| (type.equals(IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON)) 
@@ -41,14 +42,16 @@ public class ItemWhipRenderer
 	}
 	
 	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper)
+	{
 		return (
 				helper.equals(IItemRenderer.ItemRendererHelper.ENTITY_BOBBING)) 
 				|| (helper.equals(IItemRenderer.ItemRendererHelper.ENTITY_ROTATION));
 	}
 	
 	@Override
-	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
+	public void renderItem(ItemRenderType type, ItemStack stack, Object... data)
+	{
 		if (mc == null)
 		{
 			mc = ClientProxy.mc;
