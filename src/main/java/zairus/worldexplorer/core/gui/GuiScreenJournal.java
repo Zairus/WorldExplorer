@@ -1,5 +1,10 @@
 package zairus.worldexplorer.core.gui;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -12,16 +17,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import zairus.worldexplorer.core.WEConstants;
+import zairus.worldexplorer.core.WorldExplorer;
 import zairus.worldexplorer.core.block.WorldExplorerBlocks;
 import zairus.worldexplorer.core.items.WorldExplorerItems;
 import zairus.worldexplorer.core.player.CorePlayerManager;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import zairus.worldexplorer.core.util.network.JournalPacket;
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenJournal
@@ -82,11 +83,16 @@ public class GuiScreenJournal
 			this.bookTotalPages = 1;
 		}
 		
-		if (this.bookObj.getTagCompound() == null)
+		if (!this.bookObj.hasTagCompound())
 			this.bookObj.setTagCompound(new NBTTagCompound());
 		
-		if (!this.bookObj.getTagCompound().hasKey("JournalTitle"))
+		if (this.bookObj.getTagCompound().hasKey("JournalTitle"))
 		{
+			this.bookTitle = this.bookObj.getTagCompound().getString("JournalTitle");
+		}
+		else
+		{
+			WorldExplorer.packetPipeline.sendToServer(new JournalPacket());
 			this.bookObj.getTagCompound().setString("JournalTitle", this.bookTitle);
 		}
 		

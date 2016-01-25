@@ -1,22 +1,23 @@
 package zairus.worldexplorer.archery.client.renderer.item;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-
 import zairus.worldexplorer.archery.items.LongBow;
 import zairus.worldexplorer.core.ClientProxy;
 import zairus.worldexplorer.core.helpers.ColorHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ItemBowRenderer
@@ -45,7 +46,16 @@ public class ItemBowRenderer
 	}
 	
 	@Override
-	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {	
+	public void renderItem(ItemRenderType type, ItemStack stack, Object... data)
+	{
+		EntityLivingBase entity = null;
+		
+		if(data.length > 1)
+		{
+			if (data[1] instanceof EntityLivingBase)
+				entity = (EntityLivingBase) data[1];
+		}
+		
 		if (mc == null)
 		{
 			mc = ClientProxy.mc;
@@ -58,12 +68,21 @@ public class ItemBowRenderer
 			GL11.glDisable(GL11.GL_LIGHTING);
 			for (int pass = 0; pass < 2; pass++)
 			{
-				IIcon icon;
+				IIcon icon = null;
 				
-				if (pass == 0)
-					icon = ((LongBow)stack.getItem()).getIconFromUseTick();
+				if (entity != null && entity instanceof EntityPlayer)
+				{
+					EntityPlayer player = (EntityPlayer)entity;
+					
+					if (player.getItemInUse() != null)
+						icon = stack.getItem().getIcon(stack, pass, player, player.getItemInUse(), player.getItemInUseCount());
+					else
+						icon = stack.getItem().getIcon(stack, pass);
+				}
 				else
-					icon = ((LongBow)stack.getItem()).getStringIconFromUseTick();
+				{
+					icon = stack.getItem().getIcon(stack, pass);
+				}
 				
 				if (icon != null)
 				{
@@ -112,20 +131,24 @@ public class ItemBowRenderer
 			GL11.glPushMatrix();
 			for (int pass = 0; pass < 2; pass++)
 			{
-				IIcon icon = item.getIconFromDamage(0);
+				IIcon icon = item.getIcon(stack, pass);
+				
 				if (icon != null)
 				{
 					int color = item.getColorFromItemStack(stack, pass);
 					ColorHelper.glSetColor(color);
-					if (pass == 0)
-					{
-						drawItem(icon, 0.08F);
-					}
-					else
-					{
-						GL11.glTranslatef(0.0F, 0.0F, -0.01F);
-						drawItem(icon, 0.06F);
-					}
+					
+					float scale = (pass == 0)? 1.4f : 0.8f;
+					float thickness = (pass == 0)? 0.08f : 0.06f;
+					
+					if (pass > 0)
+						GL11.glTranslatef(-0.72F, -0.72F, 0.06F);
+					
+					GL11.glScalef(scale, scale, scale);
+					
+					drawItem(icon, thickness);
+					
+					GL11.glScalef(-scale, -scale, -scale);
 				}
 			}
 			GL11.glPopMatrix();
@@ -143,8 +166,8 @@ public class ItemBowRenderer
 			
 			float px = 1.0F / (16 * size);
 			
-			float scaleOffsetX = 0.9F;
-			float scaleOffsetY = 1.0F;
+			float scaleOffsetX = 0.4F;
+			float scaleOffsetY = 1.2F;
 			
 			boolean thirdPerson = !type.equals(IItemRenderer.ItemRenderType.EQUIPPED_FIRST_PERSON);
 			boolean ifp = false;
@@ -155,27 +178,52 @@ public class ItemBowRenderer
 			GL11.glScalef(scale, scale, 1.0F);
 			GL11.glTranslatef(-scaleOffsetX, -scaleOffsetY, 0.0F);
 			
-			IIcon icon = ((LongBow)stack.getItem()).getIconFromUseTick();
-			drawItem(icon, 0.09375F);
+			IIcon icon;
+			IIcon arrowIcon = null;
 			
-			icon = ((LongBow)stack.getItem()).getStringIconFromUseTick();
-			drawItem(icon, 0.09375F);
-			
-			float aX = 0.8F;
-			float aY = 0.0F;
-			float aZ = -0.1F;
-			
-			if (((LongBow)stack.getItem()).hasArrow)
+			for (int pass = 0; pass < 2; ++pass)
 			{
+				int useCount = 0;
 				
-				GL11.glTranslatef(aX, aY, aZ);
-				GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+				if (entity instanceof EntityPlayer)
+				{
+					EntityPlayer player = (EntityPlayer)entity;
+					
+					if (player.getItemInUse() != null)
+					{
+						icon = stack.getItem().getIcon(stack, pass, player, player.getItemInUse(), player.getItemInUseCount());
+						arrowIcon = ((LongBow)stack.getItem()).getArrowIcon();
+						useCount = stack.getItem().getMaxItemUseDuration(stack) - player.getItemInUseCount();
+					}
+					else
+					{
+						icon = stack.getItem().getIcon(stack, pass);
+					}
+				}
+				else
+				{
+					icon = stack.getItem().getIcon(stack, pass);
+				}
 				
-				icon = ((LongBow)stack.getItem()).getArrowIcon();
 				drawItem(icon, 0.09375F);
 				
-				GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
-				GL11.glTranslatef(-aX, -aY, aZ);
+				if (arrowIcon != null)
+				{
+					float aX = 0.8f;
+					float aY = 0.0f;
+					float aZ = 0.0f;
+					
+					aX += 0.4f * (1.0f - (((useCount / 20.0f) > 1.0f)? 1.0f : (useCount / 20.0f)));
+					aY += 0.4f * (1.0f - (((useCount / 20.0f) > 1.0f)? 1.0f : (useCount / 20.0f)));
+					
+					GL11.glTranslatef(aX, aY, aZ);
+					GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+					
+					drawItem(arrowIcon, 0.09375F);
+					
+					GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
+					GL11.glTranslatef(-aX, -aY, aZ);
+				}
 			}
 			
 			GL11.glPopMatrix();

@@ -95,7 +95,6 @@ public class Whip
 		if (!world.isRemote)
 			world.playSoundAtEntity(player, "worldexplorer:whip_swing", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 		
-		if (!world.isRemote)
 		{
 			world.spawnEntityInWorld(whipTip1);
 		}

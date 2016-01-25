@@ -7,8 +7,8 @@ import zairus.worldexplorer.core.items.WEItem;
 
 public class WEEquipmentItems
 {
-	public static WEItem hookshot = null;
-	public static WEItem rope = null;
+	//public static WEItem hookshot = null;
+	//public static WEItem rope = null;
 	public static WEItem whip = null;
 	public static WEItem whiptip = null;
 	public static WEItem whiphandle = null;
@@ -16,8 +16,8 @@ public class WEEquipmentItems
 	
 	public static void init()
 	{
-		hookshot = new Hookshot(); //************
-		rope = new Rope(); //************
+		//hookshot = new Hookshot(); //************
+		//rope = new Rope(); //************
 		whip = new Whip();
 		
 		whiptip = new WEItem().setUnlocalizedName("whiptip").setTextureName(WEConstants.CORE_PREFIX + ":whip_tip").setCreativeTab(WorldExplorer.tabWorldExplorer);
@@ -27,8 +27,8 @@ public class WEEquipmentItems
 	
 	public static void register()
 	{
-		GameRegistry.registerItem(hookshot, hookshot.getUnlocalizedName());
-		GameRegistry.registerItem(rope, rope.getUnlocalizedName());
+		//GameRegistry.registerItem(hookshot, hookshot.getUnlocalizedName());
+		//GameRegistry.registerItem(rope, rope.getUnlocalizedName());
 		GameRegistry.registerItem(whip, whip.getUnlocalizedName());
 		GameRegistry.registerItem(whiptip, whiptip.getUnlocalizedName());
 		GameRegistry.registerItem(whiphandle, whiphandle.getUnlocalizedName());

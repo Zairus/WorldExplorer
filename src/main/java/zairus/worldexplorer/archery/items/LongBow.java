@@ -1,5 +1,7 @@
 package zairus.worldexplorer.archery.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -7,14 +9,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class LongBow
 	extends WEItemRanged
@@ -23,24 +25,51 @@ public class LongBow
 	
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
+	@SideOnly(Side.CLIENT)
 	private IIcon[] stringIconArray;
+	@SideOnly(Side.CLIENT)
 	private IIcon[] arrowIconArray;
+	@SideOnly(Side.CLIENT)
 	private IIcon stringIcon;
-	
-	public boolean hasArrow = false;
-	
-	private int bowUseTick = 0;
 	
 	public LongBow()
 	{
 		super();
 		
 		setUnlocalizedName("longbow");
-		setTextureName("worldexplorer:longbow_handle");
+		setTextureName(WEConstants.CORE_PREFIX + ":longbow_handle");
 		setCreativeTab(WorldExplorer.tabWorldExplorer);
 		setFull3D();
 		setMaxStackSize(1);
 		setMaxDamage(512);
+	}
+	
+	private void initStackTag(ItemStack stack)
+	{
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+	}
+	
+	private void setBowHasArrow(ItemStack stack, boolean hasArrow)
+	{
+		this.initStackTag(stack);
+		
+		stack.getTagCompound().setBoolean("hasArrow", hasArrow);
+	}
+	
+	public boolean getBowHasAwwor(ItemStack stack)
+	{
+		boolean hasArrow = false;
+		
+		if (stack.hasTagCompound())
+		{
+			if (stack.getTagCompound().hasKey("hasArrow"))
+			{
+				hasArrow = stack.getTagCompound().getBoolean("hasArrow");
+			}
+		}
+		
+		return hasArrow;
 	}
 	
 	@Override
@@ -51,8 +80,7 @@ public class LongBow
 		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, j);
 		MinecraftForge.EVENT_BUS.post(event);
 		
-		this.bowUseTick = 0;
-		this.hasArrow = false;
+		this.setBowHasArrow(stack, false);
 		
 		if (event.isCanceled())
 		{
@@ -143,16 +171,15 @@ public class LongBow
 					, 1.0F
 					, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 			
-			this.hasArrow = true;
 			player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		}
 		
 		return stack;
     }
 	
-	public int getMaxItemUseDuration(ItemStack duration)
+	public int getMaxItemUseDuration(ItemStack stack)
 	{
-		return 72000;
+		return 7200;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -177,74 +204,39 @@ public class LongBow
 		return this.arrowIconArray[0];
 	}
 	
+	@Override
+	public IIcon getIcon(ItemStack stack, int renderPass)
+	{
+		IIcon icon = (renderPass == 0)? itemIcon : stringIcon;
+		
+		return icon;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
 	{
+		IIcon icon = (renderPass == 0)? itemIcon : stringIcon;
+		IIcon[] passIcon = (renderPass == 0)? iconArray : stringIconArray;
+		
 		if (player.getItemInUse() == null)
-			return itemIcon;
+			return icon;
 		
 		int pulling = stack.getMaxItemUseDuration() - useRemaining;
 		
 		if (pulling >= 20)
 		{
-			return this.iconArray[2];
+			return passIcon[2];
 		}
 		else if (pulling > 10)
 		{
-			return this.iconArray[1];
+			return passIcon[1];
 		}
 		else if (pulling > 3)
 		{
-			return this.iconArray[0];
+			return passIcon[0];
 		}
 		
-		return itemIcon;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromUseTick()
-	{
-		if (this.bowUseTick >= 20)
-		{
-			return this.iconArray[2];
-		}
-		if (this.bowUseTick > 10)
-		{
-			return this.iconArray[1];
-		}
-		if (this.bowUseTick > 3)
-		{
-			return this.iconArray[0];
-		}
-		
-		return itemIcon;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public IIcon getStringIconFromUseTick()
-	{
-		if (this.bowUseTick >= 20)
-		{
-			return this.stringIconArray[2];
-		}
-		if (this.bowUseTick > 10)
-		{
-			return this.stringIconArray[1];
-		}
-		if (this.bowUseTick > 3)
-		{
-			return this.stringIconArray[0];
-		}
-		return stringIcon;
-	}
-	
-	@Override
-	public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
-	{
-		++this.bowUseTick;
-	}
-	
-	public int getUseTick()
-	{
-		return this.bowUseTick;
+		return icon;
 	}
 }

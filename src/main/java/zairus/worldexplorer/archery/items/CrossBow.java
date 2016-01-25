@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 
 public class CrossBow
@@ -22,7 +23,7 @@ public class CrossBow
 		super();
 		
 		setUnlocalizedName("crossbow");
-		setTextureName("worldexplorer:crossbow");
+		setTextureName(WEConstants.CORE_PREFIX + ":crossbow");
 		setCreativeTab(WorldExplorer.tabWorldExplorer);
 		
 		this.maxStackSize = 1;
@@ -133,7 +134,7 @@ public class CrossBow
 	@Override
 	public int getMaxItemUseDuration(ItemStack duration)
 	{
-		return 72000;
+		return 7200;
 	}
 	
 	@Override

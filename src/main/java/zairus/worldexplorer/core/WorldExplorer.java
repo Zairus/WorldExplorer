@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -15,13 +24,7 @@ import zairus.worldexplorer.core.block.WorldExplorerBlocks;
 import zairus.worldexplorer.core.event.WEEventHandler;
 import zairus.worldexplorer.core.gui.GuiHandler;
 import zairus.worldexplorer.core.items.WorldExplorerItems;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import zairus.worldexplorer.core.util.network.PacketPipeline;
 
 @Mod(modid=WEConstants.CORE_MODID, name=WEConstants.CORE_NAME, version=WEConstants.CORE_VERSION)
 public class WorldExplorer
@@ -29,6 +32,7 @@ public class WorldExplorer
 	private static List<IWEAddonMod> registeredMods = new ArrayList<IWEAddonMod>();
 	public static Logger logger;
 	public static Configuration configuration;
+	public static PacketPipeline packetPipeline = new PacketPipeline();
 	
 	@SidedProxy(clientSide="zairus.worldexplorer.core.ClientProxy", serverSide="zairus.worldexplorer.core.ServerProxy")
 	public static CommonProxy proxy;
@@ -47,6 +51,7 @@ public class WorldExplorer
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		WorldExplorer.proxy.preInit(event);
+		WorldExplorer.packetPipeline.initalise();
 		
 		configuration = new Configuration(event.getSuggestedConfigurationFile());
 		
@@ -74,6 +79,13 @@ public class WorldExplorer
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(WorldExplorer.instance, new GuiHandler());
 	}
+	
+	@EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+		WorldExplorer.proxy.postInit(event);
+		WorldExplorer.packetPipeline.postInitialise();
+    }
 	
 	private void addRecipes()
 	{

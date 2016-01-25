@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 import zairus.worldexplorer.core.items.WEItem;
 
@@ -28,7 +29,7 @@ public class SpecialArrow
 		super();
 		
 		setUnlocalizedName("specialarrow");
-		setTextureName("worldexplorer:specialarrow");
+		setTextureName(WEConstants.CORE_PREFIX + ":specialarrow");
 		setCreativeTab(WorldExplorer.tabWorldExplorer);
 		setHasSubtypes(true);
 	}
@@ -73,6 +74,8 @@ public class SpecialArrow
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
 	{
 		DamageSource damagesource = DamageSource.causePlayerDamage(player);
+		
+		damagesource.damageType = "specialarrow";
 		
 		entity.attackEntityFrom(damagesource, 2.0F);
 		entity.playSound("random.bowhit", 1.1F, 1.2F / (player.worldObj.rand.nextFloat() * 0.2F + 0.9F));

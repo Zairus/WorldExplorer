@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import zairus.worldexplorer.archery.entity.EntityDart;
+import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 
 /**
@@ -23,7 +24,7 @@ public class BlowPipe
 		super();
 		
 		setUnlocalizedName("blowpipe");
-		setTextureName("worldexplorer:blowpipe");
+		setTextureName(WEConstants.CORE_PREFIX + ":blowpipe");
 		setCreativeTab(WorldExplorer.tabWorldExplorer);
 		setFull3D();
 		setMaxDamage(350);
@@ -99,6 +100,12 @@ public class BlowPipe
 				world.spawnEntityInWorld(dart);
 			}
 		}
+	}
+	
+	@Override
+	public int getMaxItemUseDuration(ItemStack duration)
+	{
+		return 3000;
 	}
 	
 	@Override

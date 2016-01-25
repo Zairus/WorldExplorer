@@ -31,7 +31,7 @@ public class EntityDart
 	private int positionX = -1;
 	private int positionY = -1;
 	private int positionZ = -1;
-	private Block field_145790_g;
+	private Block collidedBlock;
 	private int inData;
 	public Entity shootingEntity;
 	private int ticksInAir;
@@ -272,7 +272,7 @@ public class EntityDart
 				this.positionX = movingobjectposition.blockX;
 				this.positionY = movingobjectposition.blockY;
 				this.positionZ = movingobjectposition.blockZ;
-				this.field_145790_g = this.worldObj.getBlock(this.positionX, this.positionY, this.positionZ);
+				this.collidedBlock = this.worldObj.getBlock(this.positionX, this.positionY, this.positionZ);
 				this.inData = this.worldObj.getBlockMetadata(this.positionX, this.positionY, this.positionZ);
 				this.motionX = (double) ((float) (movingobjectposition.hitVec.xCoord - this.posX));
 				this.motionY = (double) ((float) (movingobjectposition.hitVec.yCoord - this.posY));
@@ -285,9 +285,9 @@ public class EntityDart
 				
 				this.setIsCritical(false);
 				
-				if (this.field_145790_g.getMaterial() != Material.air)
+				if (this.collidedBlock.getMaterial() != Material.air)
 				{
-					this.field_145790_g.onEntityCollidedWithBlock(this.worldObj, this.positionX, this.positionY, this.positionZ, this);
+					this.collidedBlock.onEntityCollidedWithBlock(this.worldObj, this.positionX, this.positionY, this.positionZ, this);
 				}
 			}
 		}
@@ -368,7 +368,7 @@ public class EntityDart
 		p_70014_1_.setShort("xTile", (short) this.positionX);
 		p_70014_1_.setShort("yTile", (short) this.positionY);
 		p_70014_1_.setShort("zTile", (short) this.positionZ);
-		p_70014_1_.setByte("inTile", (byte) Block.getIdFromBlock(this.field_145790_g));
+		p_70014_1_.setByte("inTile", (byte) Block.getIdFromBlock(this.collidedBlock));
 		p_70014_1_.setByte("inData", (byte) this.inData);
 		p_70014_1_.setDouble("damage", this.damage);
 	}
@@ -378,7 +378,7 @@ public class EntityDart
 		this.positionX = p_70037_1_.getShort("xTile");
 		this.positionY = p_70037_1_.getShort("yTile");
 		this.positionZ = p_70037_1_.getShort("zTile");
-		this.field_145790_g = Block.getBlockById(p_70037_1_.getByte("inTile") & 255);
+		this.collidedBlock = Block.getBlockById(p_70037_1_.getByte("inTile") & 255);
 		this.inData = p_70037_1_.getByte("inData") & 255;
 		
 		if (p_70037_1_.hasKey("damage", 99))

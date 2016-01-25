@@ -133,9 +133,9 @@ public class Slingshot
 		return stack;
     }
 	
-	public int getMaxItemUseDuration(ItemStack p_77626_1_)
+	public int getMaxItemUseDuration(ItemStack stack)
 	{
-		return 72000;
+		return 1000;
 	}
 	
 	@SideOnly(Side.CLIENT)
