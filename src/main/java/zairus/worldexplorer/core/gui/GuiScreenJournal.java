@@ -30,7 +30,6 @@ public class GuiScreenJournal
 {
 	private static final ResourceLocation bookGuiTextures = new ResourceLocation(WEConstants.TEXTURES_PATH, "textures/gui/zairus_charts.png");
 	
-	@SuppressWarnings("unused")
 	private final EntityPlayer editingPlayer;
 	private final ItemStack bookObj;
 	private int bookImageWidth = 251;
@@ -209,7 +208,7 @@ public class GuiScreenJournal
     				this.currPage = 1;
     				break;
     			default:
-    				this.mc.displayGuiScreen((GuiScreen)null);
+    				this.mc.displayGuiScreen(new GuiScreenEquipment(this.editingPlayer, this.editingPlayer.worldObj));
     				break;
     		}
 			
@@ -356,6 +355,12 @@ public class GuiScreenJournal
         
         itemRender.zLevel = 0.0F;
     }
+	
+	@Override
+	public boolean doesGuiPauseGame()
+	{
+		return true;
+	}
 	
 	@SideOnly(Side.CLIENT)
 	static class JournalPageButton extends GuiButton

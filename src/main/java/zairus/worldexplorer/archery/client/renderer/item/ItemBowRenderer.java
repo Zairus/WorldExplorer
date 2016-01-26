@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-import zairus.worldexplorer.archery.items.LongBow;
+import zairus.worldexplorer.archery.items.WEItemRanged;
 import zairus.worldexplorer.core.ClientProxy;
 import zairus.worldexplorer.core.helpers.ColorHelper;
 
@@ -192,7 +192,10 @@ public class ItemBowRenderer
 					if (player.getItemInUse() != null)
 					{
 						icon = stack.getItem().getIcon(stack, pass, player, player.getItemInUse(), player.getItemInUseCount());
-						arrowIcon = ((LongBow)stack.getItem()).getArrowIcon();
+						
+						ItemStack arrowStack = WEItemRanged.getAmmo(stack, player);
+						arrowIcon = arrowStack.getItem().getIconFromDamage(arrowStack.getItemDamage());
+						
 						useCount = stack.getItem().getMaxItemUseDuration(stack) - player.getItemInUseCount();
 					}
 					else
@@ -209,19 +212,19 @@ public class ItemBowRenderer
 				
 				if (arrowIcon != null)
 				{
-					float aX = 0.8f;
-					float aY = 0.0f;
+					float aX = -0.0f;
+					float aY = 1.1f;
 					float aZ = 0.0f;
 					
-					aX += 0.4f * (1.0f - (((useCount / 20.0f) > 1.0f)? 1.0f : (useCount / 20.0f)));
-					aY += 0.4f * (1.0f - (((useCount / 20.0f) > 1.0f)? 1.0f : (useCount / 20.0f)));
+					aX += 0.2f * (1.0f - (((useCount / 20.0f) > 1.0f)? 1.0f : (useCount / 20.0f)));
+					aY += 0.2f * (1.0f - (((useCount / 20.0f) > 1.0f)? 1.0f : (useCount / 20.0f)));
 					
 					GL11.glTranslatef(aX, aY, aZ);
-					GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+					GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
 					
 					drawItem(arrowIcon, 0.09375F);
 					
-					GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
+					GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
 					GL11.glTranslatef(-aX, -aY, aZ);
 				}
 			}

@@ -5,6 +5,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,6 +28,8 @@ public class CrossBow
 		this.maxStackSize = 1;
 		
 		this.bFull3D = true;
+		
+		this.addAllowedAmmo(Items.arrow, WEArcheryItems.specialarrow);
 	}
 	
 	@Override
@@ -40,7 +43,9 @@ public class CrossBow
 			return event.result;
 		}
 		
-		if (player.capabilities.isCreativeMode || player.inventory.hasItem(WEArcheryItems.specialarrow) || player.inventory.hasItem(Items.arrow))
+		ItemStack ammo = WEItemRanged.getAmmo(stack, player);
+		
+		if (player.capabilities.isCreativeMode || ammo != null)
 		{
 			player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		}
@@ -64,9 +69,17 @@ public class CrossBow
 		j = event.charge;
 		
 		boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+		boolean hasArrow = false;
 		
-		if (flag || player.inventory.hasItem(Items.arrow) || player.inventory.hasItem(WEArcheryItems.specialarrow))
+		for (int i = 0; i < getAllowedAmmo().size(); ++i)
 		{
+			if(player.inventory.hasItem(getAllowedAmmo().get(i)))
+				hasArrow = true;
+		}
+		
+		if (flag || hasArrow)
+		{
+			Item ammoItem = WEItemRanged.getAmmo(stack, player).getItem();
 			float f = (float)j / 25.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 			
@@ -117,7 +130,8 @@ public class CrossBow
 			}
 			else
 			{
-				player.inventory.consumeInventoryItem(Items.arrow);
+				if(player.inventory.hasItem(ammoItem))
+					player.inventory.consumeInventoryItem(ammoItem);
 			}
 			
 			if (!world.isRemote)

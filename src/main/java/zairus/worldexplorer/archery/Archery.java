@@ -104,6 +104,62 @@ public class Archery
 				});
 		
 		GameRegistry.addShapedRecipe(
+				new ItemStack(WEArcheryItems.specialarrow, 1, 2)
+				, new Object[] {
+					 "  p"
+					," s "
+					,"f  "
+					,'p'
+					,Items.flint
+					,'s'
+					,new ItemStack(WEArcheryItems.specialarrow, 1, 0)
+					,'f'
+					,Items.feather
+				});
+		
+		GameRegistry.addShapedRecipe(
+				new ItemStack(WEArcheryItems.specialarrow, 1, 3)
+				, new Object[] {
+					 "  p"
+					," s "
+					,"f  "
+					,'p'
+					,Items.iron_ingot
+					,'s'
+					,new ItemStack(WEArcheryItems.specialarrow, 1, 0)
+					,'f'
+					,Items.feather
+				});
+		
+		GameRegistry.addShapedRecipe(
+				new ItemStack(WEArcheryItems.specialarrow, 1, 4)
+				, new Object[] {
+					 "  p"
+					," s "
+					,"f  "
+					,'p'
+					,Items.diamond
+					,'s'
+					,new ItemStack(WEArcheryItems.specialarrow, 1, 0)
+					,'f'
+					,Items.feather
+				});
+		
+		GameRegistry.addShapedRecipe(
+				new ItemStack(WEArcheryItems.specialarrow, 1, 5)
+				, new Object[] {
+					 "  p"
+					," s "
+					,"f  "
+					,'p'
+					,Blocks.obsidian
+					,'s'
+					,new ItemStack(WEArcheryItems.specialarrow, 1, 0)
+					,'f'
+					,Items.feather
+				});
+		
+		GameRegistry.addShapedRecipe(
 				new ItemStack(WEArcheryItems.blowpipe)
 				, new Object[] {
 					 " h "

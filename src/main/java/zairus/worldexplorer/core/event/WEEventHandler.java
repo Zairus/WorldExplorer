@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import zairus.worldexplorer.archery.items.WEItemRanged;
@@ -82,6 +83,15 @@ public class WEEventHandler
 	{
 		//
 	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onRender(RenderPlayerEvent.Post event)
+	{
+		//IItemRenderer r = new ItemBlowPipeRenderer();
+		//r.renderItem(ItemRenderType.EQUIPPED_FIRST_PERSON, new ItemStack(WEArcheryItems.blowpipe, 1, 0), event.entityPlayer, event.entityPlayer);
+	}
+	
 	/*
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent event)

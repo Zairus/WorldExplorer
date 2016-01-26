@@ -20,7 +20,7 @@ import zairus.worldexplorer.core.items.WEItem;
 public class SpecialArrow
 	extends WEItem
 {
-	public static final String[] arrow_types = new String[] {"sharpened_stick", "stone_arrow"};
+	public static final String[] arrow_types = new String[] {"sharpened_stick", "stone_arrow", "flint_arrow", "iron_arrow", "diamond_arrow", "obsidian_arrow"};
 	
 	private IIcon[] arrowIcons;
 	
