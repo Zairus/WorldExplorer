@@ -2,6 +2,7 @@ package zairus.worldexplorer.core.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -16,6 +17,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import zairus.worldexplorer.core.items.WEItem;
+import zairus.worldexplorer.core.items.WEItem.Improvement;
 import zairus.worldexplorer.core.tileentity.TileEntityDesk;
 
 public class ContainerStudyDesk
@@ -149,25 +151,15 @@ public class ContainerStudyDesk
 			
 			if (subjectItem instanceof WEItem)
 			{
-				improved = subject.copy();
-				
-				if (material.getItem() == Items.gunpowder)
-					addImprovement(improved, "Gunpowder Modifier", 0.05F, 3.0F);
-				
-				if (material.getItem() == Items.slime_ball)
-					addImprovement(improved, "Slime Modifier", 1.0F, 8.0F);
-				
-				if (material.getItem() == Items.glowstone_dust)
-					addImprovement(improved, "Glowstone Modifier", 0.05F, 3.0F);
-				
-				if (material.getItem() == Items.redstone)
-					addImprovement(improved, "Redstone Modifier", 0.25F, 48.0F);
-				
-				if (material.getItem() == Items.ender_pearl)
-					addImprovement(improved, "Ender Modifier", 0.05F, 100.0F);
-				
-				if (material.getItem() == Items.ender_eye)
-					addImprovement(improved, "Ender Modifier", 0.15F, 100.0F);
+				if (((WEItem)subjectItem).hasImprovements())
+				{
+					improved = subject.copy();
+					
+					Improvement imp = ((WEItem)subjectItem).getImprovementFromMaterial(material.getItem());
+					
+					if (imp != null)
+						addImprovement(improved, imp.improvementType.getKey(), imp.valuePerUnit, imp.improvementType.getMaxValue());
+				}
 			}
 		}
 		return improved;
@@ -349,7 +341,9 @@ public class ContainerStudyDesk
 		{
 			if (!(
 					stack.getItem() == Items.redstone
+					|| stack.getItem() == Item.getItemFromBlock(Blocks.redstone_block)
 					|| stack.getItem() == Items.glowstone_dust
+					|| stack.getItem() == Item.getItemFromBlock(Blocks.glowstone)
 					|| stack.getItem() == Items.gunpowder
 					|| stack.getItem() == Items.slime_ball
 					|| stack.getItem() == Items.ender_eye
