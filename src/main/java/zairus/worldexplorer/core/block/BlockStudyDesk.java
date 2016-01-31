@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 import zairus.worldexplorer.core.tileentity.TileEntityDesk;
 import cpw.mods.fml.relauncher.Side;
@@ -86,7 +87,7 @@ public class BlockStudyDesk
 		}
 		else
 		{
-			player.openGui(WorldExplorer.instance, 0, world, x, y, z);
+			player.openGui(WorldExplorer.instance, WEConstants.GUIID_STUDYDESK, world, x, y, z);
 			return true;
 		}
 	}

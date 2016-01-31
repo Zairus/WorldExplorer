@@ -38,6 +38,7 @@ public class GuiScreenJournal
 {
 	private static final ResourceLocation bookGuiTextures = new ResourceLocation(WEConstants.TEXTURES_PATH, "textures/gui/zairus_charts.png");
 	
+	@SuppressWarnings("unused")
 	private final EntityPlayer editingPlayer;
 	private final ItemStack bookObj;
 	private int bookImageWidth = 251;
@@ -220,7 +221,7 @@ public class GuiScreenJournal
     			case 7:
     				break;
     			default:
-    				this.mc.displayGuiScreen(new GuiScreenEquipment(this.editingPlayer, this.editingPlayer.worldObj));
+    				this.mc.displayGuiScreen((GuiScreen)null);
     				break;
     		}
 			

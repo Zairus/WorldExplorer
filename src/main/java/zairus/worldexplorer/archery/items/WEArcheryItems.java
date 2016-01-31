@@ -1,5 +1,6 @@
 package zairus.worldexplorer.archery.items;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
@@ -8,7 +9,6 @@ import net.minecraftforge.common.MinecraftForge;
 import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 import zairus.worldexplorer.core.items.WEItem;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class WEArcheryItems
 {
@@ -18,6 +18,7 @@ public class WEArcheryItems
 	public static WEItem blowpipe = null;
 	public static WEItem crossbow = null;
 	
+	public static WEItem quiver = null;
 	public static WEItem dart = null;
 	public static WEItem specialarrow = null;
 	
@@ -35,6 +36,7 @@ public class WEArcheryItems
 		
 		/** Parts */
 		
+		quiver = new Quiver();
 		longbow_handle = new WEItem().setUnlocalizedName("longbow_handle").setTextureName(WEConstants.CORE_PREFIX + ":longbow_handle_standby").setCreativeTab(WorldExplorer.tabWorldExplorer);
 		longbow_string = new WEItem().setUnlocalizedName("longbow_string").setTextureName(WEConstants.CORE_PREFIX + ":longbow_string_pulling_0").setCreativeTab(WorldExplorer.tabWorldExplorer);
 		
@@ -53,6 +55,7 @@ public class WEArcheryItems
 		GameRegistry.registerItem(dart, dart.getUnlocalizedName());
 		GameRegistry.registerItem(specialarrow, specialarrow.getUnlocalizedName());
 		
+		GameRegistry.registerItem(quiver, quiver.getUnlocalizedName());
 		GameRegistry.registerItem(longbow_handle, longbow_handle.getUnlocalizedName());
 		GameRegistry.registerItem(longbow_string, longbow_string.getUnlocalizedName());
 		

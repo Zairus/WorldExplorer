@@ -1,6 +1,7 @@
 package zairus.worldexplorer.core;
 
 import zairus.worldexplorer.core.block.WorldExplorerBlocks;
+import zairus.worldexplorer.core.client.IPlayerRenderer;
 import zairus.worldexplorer.core.gui.GuiScreenJournal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +32,8 @@ public class ClientProxy
 		{
 			WorldExplorer.getRegisteredMods().get(i).getRenderManager().registerRenderers();
 		}
+		
+		WEKeyBindings.init();
 	}
 	
 	@Override
@@ -45,5 +48,13 @@ public class ClientProxy
 		super.displayBookJournalGUI(player, stack);
 		
 		mc.displayGuiScreen(new GuiScreenJournal(player, stack));
+	}
+	
+	public void registerPlayerRenderer(IPlayerRenderer... renderers)
+	{
+		for (int i = 0; i < renderers.length; ++i)
+		{
+			playerRenderers.add(renderers[i]);
+		}
 	}
 }

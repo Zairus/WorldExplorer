@@ -53,13 +53,9 @@ public class WorldExplorer
 		WorldExplorer.proxy.preInit(event);
 		WorldExplorer.packetPipeline.initalise();
 		
-		configuration = new Configuration(event.getSuggestedConfigurationFile());
-		
-		configuration.load();
+		WEConfig.init(event.getSuggestedConfigurationFile());
 		
 		WorldExplorerItems.init();
-		
-		configuration.save();
 	}
 	
 	@Mod.EventHandler

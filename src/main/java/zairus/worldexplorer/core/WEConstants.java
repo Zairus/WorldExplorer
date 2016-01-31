@@ -16,4 +16,7 @@ public class WEConstants
 	public static final String EQUIPMENT_VERSION = "1.1.6 Dev";
 	
 	public static final String TEXTURES_PATH = "worldexplorer";
+	
+	public static final int GUIID_STUDYDESK = 0;
+	public static final int GUIID_EQUIPMENT = 1;
 }

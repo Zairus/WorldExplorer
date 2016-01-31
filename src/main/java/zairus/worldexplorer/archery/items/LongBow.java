@@ -6,9 +6,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -16,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import zairus.worldexplorer.archery.entity.EntitySpecialArrow;
 import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 
@@ -103,7 +102,8 @@ public class LongBow
 		
 		if (flag || hasArrow)
 		{
-			Item ammoItem = WEItemRanged.getAmmo(stack, player).getItem();
+			ItemStack ammo = WEItemRanged.getAmmo(stack, player);
+			
 			float f = (float)j / 25.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 			
@@ -117,7 +117,7 @@ public class LongBow
 				f = 1.0F;
 			}
 			
-			EntityArrow entityArrow = new EntityArrow(world, player, f * 2.5f);
+			EntitySpecialArrow entityArrow = new EntitySpecialArrow(world, player, f * 2.5f, ammo);
 			
 			if (f == 1.0F)
 			{
@@ -154,8 +154,8 @@ public class LongBow
 			}
 			else
 			{
-				if(player.inventory.hasItem(ammoItem))
-					player.inventory.consumeInventoryItem(ammoItem);
+				if(player.inventory.hasItem(ammo.getItem()))
+					player.inventory.consumeInventoryItem(ammo.getItem());
 			}
 			
 			if (!world.isRemote)

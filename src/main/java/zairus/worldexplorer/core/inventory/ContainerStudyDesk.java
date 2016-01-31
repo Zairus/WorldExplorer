@@ -4,7 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
@@ -21,7 +20,7 @@ import zairus.worldexplorer.core.items.WEItem.Improvement;
 import zairus.worldexplorer.core.tileentity.TileEntityDesk;
 
 public class ContainerStudyDesk
-	extends Container
+	extends ContainerBase
 {
 	public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
 	public InventoryCraftResult craftResult = new InventoryCraftResult();
@@ -100,26 +99,6 @@ public class ContainerStudyDesk
 		}
 	}
 	
-	private int placeSlotGrid(IInventory inv, int iIndex, int gridX, int gridY, int gridCols, int gridRows)
-	{
-		gridDone:
-			for (int i = 0; i < gridRows; ++i)
-			{
-				for (int j = 0; j < gridCols; ++j)
-				{
-					if (iIndex > inv.getSizeInventory())
-					{
-						break gridDone;
-					}
-					
-					this.addSlotToContainer(new Slot(inv, iIndex, gridX + (j * 18), gridY + (i * 18)));
-					++iIndex;
-				}
-			}
-		
-		return iIndex;
-	}
-	
 	public void onCraftMatrixChanged(IInventory inventory)
 	{
 		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.worldObj));
@@ -185,7 +164,8 @@ public class ContainerStudyDesk
 	}
 	
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
+	public boolean canInteractWith(EntityPlayer player)
+	{
 		return this.inventory.isUseableByPlayer(player);
 	}
 	
