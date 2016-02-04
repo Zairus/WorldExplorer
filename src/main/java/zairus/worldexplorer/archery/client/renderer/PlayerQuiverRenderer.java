@@ -17,6 +17,7 @@ import zairus.worldexplorer.archery.items.WEArcheryItems;
 import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.client.IPlayerRenderer;
 import zairus.worldexplorer.core.helpers.ColorHelper;
+import zairus.worldexplorer.core.player.CorePlayerManager;
 
 @SideOnly(Side.CLIENT)
 public class PlayerQuiverRenderer
@@ -29,6 +30,9 @@ public class PlayerQuiverRenderer
 	
 	public void render(EntityPlayer player)
 	{
+		if (!CorePlayerManager.getPlayerEquipmentInventory(player).hasQuiver())
+			return;
+		
 		TextureManager renderManager = Minecraft.getMinecraft().renderEngine;
 		
 		float offsetX = 0.15f;

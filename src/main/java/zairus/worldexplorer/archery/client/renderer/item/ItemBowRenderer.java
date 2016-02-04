@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+import zairus.worldexplorer.archery.items.WEArcheryItems;
 import zairus.worldexplorer.archery.items.WEItemRanged;
 import zairus.worldexplorer.core.ClientProxy;
 import zairus.worldexplorer.core.helpers.ColorHelper;
@@ -194,6 +195,10 @@ public class ItemBowRenderer
 						icon = stack.getItem().getIcon(stack, pass, player, player.getItemInUse(), player.getItemInUseCount());
 						
 						ItemStack arrowStack = WEItemRanged.getAmmo(stack, player);
+						
+						if (arrowStack == null)
+							arrowStack = new ItemStack(WEArcheryItems.specialarrow, 1, 1);
+						
 						arrowIcon = arrowStack.getItem().getIconFromDamage(arrowStack.getItemDamage());
 						
 						useCount = stack.getItem().getMaxItemUseDuration(stack) - player.getItemInUseCount();

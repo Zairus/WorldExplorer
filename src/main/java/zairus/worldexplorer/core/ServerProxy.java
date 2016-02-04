@@ -1,11 +1,11 @@
 package zairus.worldexplorer.core;
 
-import zairus.worldexplorer.core.player.CorePlayerManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import zairus.worldexplorer.core.player.CorePlayerManager;
 
 public class ServerProxy
 	extends CommonProxy

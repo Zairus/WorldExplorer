@@ -39,6 +39,24 @@ public class WEItemRanged
 		return 1;
 	}
 	
+	@Override
+	public boolean updatesFOV()
+	{
+		return true;
+	}
+	
+	@Override
+	public float getFOVValue()
+	{
+		return 0.4f;
+	}
+	
+	@Override
+	public float getFOVSpeedFactor()
+	{
+		return 350.0f;
+	}
+	
 	protected void addAllowedAmmo(Item... ammo)
 	{
 		for (int i = 0; i < ammo.length; ++i)

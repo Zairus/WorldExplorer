@@ -99,12 +99,14 @@ public class TileEntityDesk
 	}
 	
 	@Override
-	public String getInventoryName() {
+	public String getInventoryName()
+	{
 		return this.hasCustomInventoryName() ? this.customName : "container.studydesk";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomInventoryName()
+	{
 		return this.customName != null && this.customName.length() > 0;
 	}
 	
@@ -114,7 +116,8 @@ public class TileEntityDesk
 	}
 	
 	@Override
-	public int getInventoryStackLimit() {
+	public int getInventoryStackLimit()
+	{
 		return 64;
 	}
 	

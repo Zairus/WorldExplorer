@@ -109,13 +109,14 @@ public class PacketPipeline
 	
 	public void initalise()
 	{
-		this.channels = NetworkRegistry.INSTANCE.newChannel("ZairusIMM", this);
+		this.channels = NetworkRegistry.INSTANCE.newChannel("ZairusWE", this);
 		registerPackets();
 	}
 	
 	public void registerPackets()
 	{
 		registerPacket(JournalPacket.class);
+		registerPacket(GUIEquipmentPacket.class);
 	}
 	
 	public void postInitialise()

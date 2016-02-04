@@ -1,14 +1,14 @@
 package zairus.worldexplorer.core;
 
-import zairus.worldexplorer.core.block.WorldExplorerBlocks;
-import zairus.worldexplorer.core.client.IPlayerRenderer;
-import zairus.worldexplorer.core.gui.GuiScreenJournal;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import zairus.worldexplorer.core.block.WorldExplorerBlocks;
+import zairus.worldexplorer.core.client.IPlayerRenderer;
+import zairus.worldexplorer.core.gui.GuiScreenJournal;
 
 public class ClientProxy
 	extends CommonProxy

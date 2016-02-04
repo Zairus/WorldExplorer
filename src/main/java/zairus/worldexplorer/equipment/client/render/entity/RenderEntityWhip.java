@@ -7,6 +7,11 @@ import static net.minecraftforge.client.IItemRenderer.ItemRendererHelper.ENTITY_
 
 import java.util.Random;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -26,14 +31,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import zairus.worldexplorer.equipment.entity.EntityWhipTip;
 import zairus.worldexplorer.equipment.items.WEEquipmentItems;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderEntityWhip
@@ -48,7 +47,7 @@ public class RenderEntityWhip
     
 	public void doRender(EntityWhipTip whip, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
 	{
-		ItemStack itemstack = new ItemStack(WEEquipmentItems.whiptip);
+		ItemStack itemstack = new ItemStack(WEEquipmentItems.spyglass);
 		
         if (itemstack.getItem() == null)
         {
@@ -291,7 +290,7 @@ public class RenderEntityWhip
 
             float f9 = 0.0625F;
             f10 = 0.021875F;
-            ItemStack itemstack = new ItemStack(WEEquipmentItems.whip);
+            ItemStack itemstack = new ItemStack(WEEquipmentItems.spyglass);
             byte b0 = 1;
             
             GL11.glTranslatef(-f7, -f8, -((f9 + f10) * (float)b0 / 2.0F));

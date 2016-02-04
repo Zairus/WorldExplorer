@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import zairus.worldexplorer.core.WEConstants;
@@ -24,9 +24,9 @@ public class GuiScreenEquipment
 	private float x1;
 	private float y1;
 	
-	public GuiScreenEquipment(EntityPlayer player, World world)
+	public GuiScreenEquipment(InventoryPlayer playerInv, World world)
 	{
-		super(new ContainerEquipment(player, world));
+		super(new ContainerEquipment(world, playerInv.player.posX, playerInv.player.posY, playerInv.player.posZ));
 		
 		this.mc = Minecraft.getMinecraft();
 		this.xSize = 176;

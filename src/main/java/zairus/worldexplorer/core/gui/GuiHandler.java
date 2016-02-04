@@ -25,7 +25,7 @@ public class GuiHandler
 			}
 			break;
 		case WEConstants.GUIID_EQUIPMENT:
-			return new ContainerEquipment(player, world);
+			return new ContainerEquipment(player.inventory, world);
 		}
 		
 		return null;
@@ -44,7 +44,7 @@ public class GuiHandler
 			}
 			break;
 		case WEConstants.GUIID_EQUIPMENT:
-			return new GuiScreenEquipment(player, world);
+			return new GuiScreenEquipment(player.inventory, world);
 		}
 		
 		return null;

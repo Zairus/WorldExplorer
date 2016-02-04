@@ -3,8 +3,11 @@ package zairus.worldexplorer.core.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import zairus.worldexplorer.core.gui.IGuiOverlay;
 
 public class WEItem
 	extends Item
@@ -49,6 +52,32 @@ public class WEItem
         super.setMaxStackSize(size);
         return this;
     }
+	
+	public boolean holdsAmmo()
+	{
+		return false;
+	}
+	
+	public boolean updatesFOV()
+	{
+		return false;
+	}
+	
+	public float getFOVValue()
+	{
+		return 0.0f;
+	}
+	
+	public float getFOVSpeedFactor()
+	{
+		return 0.0f;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public IGuiOverlay getUseOverlay()
+	{
+		return null;
+	}
 	
 	protected void addImprovements() {}
 	

@@ -10,20 +10,20 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import zairus.worldexplorer.archery.items.WEItemRanged;
-import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WEKeyBindings;
 import zairus.worldexplorer.core.WorldExplorer;
 import zairus.worldexplorer.core.client.IPlayerRenderer;
+import zairus.worldexplorer.core.items.WEItem;
 import zairus.worldexplorer.core.items.WorldExplorerItems;
 import zairus.worldexplorer.core.player.CorePlayerManager;
+import zairus.worldexplorer.core.util.network.GUIEquipmentPacket;
 
 public class WEEventHandler
 {
@@ -43,14 +43,14 @@ public class WEEventHandler
 	{
 		CorePlayerManager.checkInitialize(event.player);
 		
-		boolean journalGiven = event.player.getEntityData().getBoolean("journalGiven");
+		boolean journalGiven = CorePlayerManager.getJournalGiven(event.player);
 		
 		if (!journalGiven)
 		{
 			ItemStack stack = new ItemStack(WorldExplorerItems.journal);
 			event.player.inventory.addItemStackToInventory(stack);
 			journalGiven = true;
-			event.player.getEntityData().setBoolean("journalGiven", journalGiven);
+			CorePlayerManager.setJournalGiven(event.player, journalGiven);
 		}
 	}
 	
@@ -61,10 +61,15 @@ public class WEEventHandler
 		if (!event.entity.isUsingItem())
 			return;
 		
-		if (!(event.entity.getItemInUse().getItem() instanceof WEItemRanged))
-			return;
-		
-		event.newfov = event.fov  / (event.fov + (0.4f  * getItemInUsePercentaje(event.entity, 350.0f)));
+		if (event.entity.getItemInUse().getItem() instanceof WEItem)
+		{
+			WEItem item = (WEItem)event.entity.getItemInUse().getItem();
+			
+			if (item.updatesFOV())
+			{
+				event.newfov = event.fov / (event.fov + (item.getFOVValue() * getItemInUsePercentaje(event.entity, item.getFOVSpeedFactor())));
+			}
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -112,11 +117,24 @@ public class WEEventHandler
 	{
 		if(WEKeyBindings.explorergui.isPressed())
 		{
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			World world = Minecraft.getMinecraft().theWorld;
+			WorldExplorer.packetPipeline.sendToServer(new GUIEquipmentPacket());
+		}
+	}
+	
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onRenderGameOverlay(RenderGameOverlayEvent.Pre event)
+	{
+		ItemStack usingStack = Minecraft.getMinecraft().thePlayer.getItemInUse();
+		
+		if (usingStack != null && usingStack.getItem() instanceof WEItem)
+		{
+			WEItem item = (WEItem)usingStack.getItem();
 			
-			if (player != null && world != null)
-				player.openGui(WorldExplorer.instance, WEConstants.GUIID_EQUIPMENT, world, 0, 0, 0);
+			if (item.getUseOverlay() != null && event.type == ElementType.ALL)
+			{
+				item.getUseOverlay().draw();
+			}
 		}
 	}
 	

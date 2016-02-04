@@ -18,4 +18,10 @@ public class Quiver
 		
 		this.maxStackSize = 1;
 	}
+	
+	@Override
+	public boolean holdsAmmo()
+	{
+		return true;
+	}
 }

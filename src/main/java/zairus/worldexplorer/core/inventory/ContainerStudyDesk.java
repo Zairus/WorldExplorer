@@ -192,28 +192,6 @@ public class ContainerStudyDesk
 		super.addCraftingToCrafters(crafting);
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void detectAndSendChanges()
-	{
-		for (int i = 0; i < this.inventorySlots.size(); ++i)
-		{
-			ItemStack itemstack = ((Slot)this.inventorySlots.get(i)).getStack();
-			ItemStack itemstack1 = (ItemStack)this.inventoryItemStacks.get(i);
-			
-			if (!ItemStack.areItemStacksEqual(itemstack1, itemstack))
-			{
-				itemstack1 = itemstack == null ? null : itemstack.copy();
-				this.inventoryItemStacks.set(i, itemstack1);
-				
-				for (int j = 0; j < this.crafters.size(); ++j)
-				{
-					((ICrafting)this.crafters.get(j)).sendSlotContents(this, i, itemstack1);
-				}
-			}
-		}
-	}
-	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotNumber)
 	{
@@ -300,12 +278,6 @@ public class ContainerStudyDesk
 			this.inventory.setInventorySlotContents(i + 28, this.craftMatrix.getStackInSlot(i));
 		}
 		this.inventory.closeInventory();
-	}
-	
-	@Override
-	public void putStackInSlot(int slot, ItemStack stack)
-	{
-		this.getSlot(slot).putStack(stack);
 	}
 	
 	private class SlotImprovement

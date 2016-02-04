@@ -398,7 +398,7 @@ public class EntityWhipTip
 	@Override
 	protected void entityInit() {
 		this.dataWatcher.addObject(16, Byte.valueOf((byte)0));
-		this.dataWatcher.addObject(10, new ItemStack(WEEquipmentItems.whip));
+		this.dataWatcher.addObject(10, new ItemStack(WEEquipmentItems.spyglass));
 	}
 	
 	@Override
