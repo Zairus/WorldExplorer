@@ -5,7 +5,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -117,42 +119,14 @@ public class LongBow
 				f = 1.0F;
 			}
 			
-			EntitySpecialArrow entityArrow = new EntitySpecialArrow(world, player, f * 2.5f, ammo);
-			
-			if (f == 1.0F)
-			{
-				entityArrow.setIsCritical(true);
-			}
-			
-			int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-			
-			if (k > 0)
-			{
-				entityArrow.setDamage(entityArrow.getDamage() + (double)k * 0.5D + 0.5D);
-			}
-			
-			int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-			
-			if (l > 0)
-			{
-				entityArrow.setKnockbackStrength(l);
-			}
-			
-			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0)
-			{
-				entityArrow.setFire(100);
-			}
+			Entity projectile = getEntityToShoot(stack, ammo, f, world, player, !flag);
 			
 			stack.damageItem(1, player);
 			
 			if (!world.isRemote)
 				world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 			
-			if (flag)
-			{
-				entityArrow.canBePickedUp = 2;
-			}
-			else
+			if (!flag)
 			{
 				if(player.inventory.hasItem(ammo.getItem()))
 					player.inventory.consumeInventoryItem(ammo.getItem());
@@ -160,9 +134,63 @@ public class LongBow
 			
 			if (!world.isRemote)
 			{
-				world.spawnEntityInWorld(entityArrow);
+				world.spawnEntityInWorld(projectile);
 			}
 		}
+	}
+	
+	private Entity getEntityToShoot(ItemStack stack, ItemStack ammo, float pull, World world, EntityPlayer player, boolean canBePickedUp)
+	{
+		EntityArrow arrow = null;
+		EntitySpecialArrow specialArrow = null;
+		
+		int power = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+		int punch = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+		int flame = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
+		
+		if (ammo.getItem() == WEArcheryItems.specialarrow)
+		{
+			specialArrow = new EntitySpecialArrow(world, player, pull * 2.5f, ammo);
+			
+			if (pull == 1.0f)
+				specialArrow.setIsCritical(true);
+			
+			if (power > 0)
+				specialArrow.setDamage(specialArrow.getDamage() + (double)power * 0.5D + 0.5D);
+			
+			if (punch > 0)
+				specialArrow.setKnockbackStrength(punch);
+			
+			if (flame > 0)
+				specialArrow.setFire(100);
+			
+			if (!canBePickedUp)
+				specialArrow.canBePickedUp = 2;
+		}
+		else
+		{
+			arrow = new EntityArrow(world, player, pull * 2.5f);
+			
+			if (pull == 1.0f)
+				arrow.setIsCritical(true);
+			
+			if (power > 0)
+				arrow.setDamage(arrow.getDamage() + (double)power * 0.5D + 0.5D);
+			
+			if (punch > 0)
+				arrow.setKnockbackStrength(punch);
+			
+			if (flame > 0)
+				arrow.setFire(100);
+			
+			if (!canBePickedUp)
+				arrow.canBePickedUp = 2;
+		}
+		
+		if (specialArrow != null)
+			return (Entity)specialArrow;
+		else
+			return (Entity)arrow;
 	}
 	
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)

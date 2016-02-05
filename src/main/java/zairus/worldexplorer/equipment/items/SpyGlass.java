@@ -56,6 +56,9 @@ public class SpyGlass
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
+		if (!world.isRemote)
+			world.playSoundAtEntity(player, WEConstants.CORE_PREFIX + ":spyglass_look", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 1.5F);
+		
 		player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		
 		return stack;
@@ -64,7 +67,8 @@ public class SpyGlass
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useCount)
 	{
-		;
+		if (!world.isRemote)
+			world.playSoundAtEntity(player, WEConstants.CORE_PREFIX + ":spyglass_close", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 1.5F);
 	}
 	
 	@Override

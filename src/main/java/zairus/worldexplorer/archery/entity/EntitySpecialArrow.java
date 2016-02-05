@@ -311,6 +311,8 @@ public class EntitySpecialArrow
 						movingobjectposition.entityHit.setFire(5);
 					}
 					
+					k += (float)this.arrowStack.getItemDamage();
+					
 					if (movingobjectposition.entityHit.attackEntityFrom(damagesource, (float) k))
 					{
 						if (movingobjectposition.entityHit instanceof EntityLivingBase)

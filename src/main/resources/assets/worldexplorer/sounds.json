@@ -89,4 +89,54 @@
 			}
 		]
 	}
+	,"spyglass_look":
+	{
+		"category": "master"
+		,"sounds": [
+			{
+				"name": "spyglass_look"
+				,"stream": false
+			}
+		]
+	}
+	,"spyglass_close":
+	{
+		"category": "master"
+		,"sounds": [
+			{
+				"name": "spyglass_close"
+				,"stream": false
+			}
+		]
+	}
+	,"crossbow_charge":
+	{
+		"category": "master"
+		,"sounds": [
+			{
+				"name": "crossbow_charge"
+				,"stream": false
+			}
+		]
+	}
+	,"crossbow_handle":
+	{
+		"category": "master"
+		,"sounds": [
+			{
+				"name": "crossbow_handle"
+				,"stream": false
+			}
+		]
+	}
+	,"crossbow_pull":
+	{
+		"category": "master"
+		,"sounds": [
+			{
+				"name": "crossbow_pull"
+				,"stream": false
+			}
+		]
+	}
 }

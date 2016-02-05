@@ -6,22 +6,28 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import zairus.worldexplorer.archery.client.model.ModelCrossBow;
+import zairus.worldexplorer.archery.items.CrossBow;
+import zairus.worldexplorer.archery.items.WEArcheryItems;
+import zairus.worldexplorer.archery.items.WEItemRanged;
 import zairus.worldexplorer.core.ClientProxy;
+import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.helpers.ColorHelper;
 
 @SideOnly(Side.CLIENT)
 public class ItemCrossBowRenderer
 	implements IItemRenderer
 {
-	private static final ResourceLocation blowPipeTextures = new ResourceLocation("worldexplorer", "textures/model/crossbow_textures.png");
+	private static final ResourceLocation blowPipeTextures = new ResourceLocation(WEConstants.CORE_PREFIX, "textures/model/crossbow_textures.png");
 	private ModelCrossBow crossBowModel = new ModelCrossBow();
 	
 	private static Minecraft mc = null;
@@ -76,9 +82,17 @@ public class ItemCrossBowRenderer
 			boolean flag = false;
 			float stagePercent = 0.0f;
 			
+			ItemStack arrowStack = null;
+			boolean pulling = false;
+			boolean hasArrow = false;
+			
 			if (entity != null && entity instanceof EntityPlayer)
 			{
 				EntityPlayer player = (EntityPlayer)entity;
+				
+				arrowStack = WEItemRanged.getAmmo(stack, player);
+				hasArrow = ((CrossBow)stack.getItem()).getBowHasAwwor(stack);
+				pulling = player.getItemInUse() != null || hasArrow;
 				
 				if (player.getItemInUse() != null)
 				{
@@ -91,6 +105,9 @@ public class ItemCrossBowRenderer
 					if (stagePercent > 1.0f)
 						stagePercent = 1.0f;
 				}
+				
+				if (hasArrow)
+					stagePercent = 1.0f;
 			}
 			
 			if ((type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) && flag)
@@ -108,13 +125,54 @@ public class ItemCrossBowRenderer
 			GL11.glRotatef(angleZ, 0.0F, 0.0F, 1.0F);
 			GL11.glRotatef(angleY, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(offsetX, offsetY, offsetZ);
+			
 			crossBowModel.setStage(stagePercent);
 			crossBowModel.render((Entity)data[1], 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+			
 			GL11.glTranslatef(offsetX * -1, offsetY * -1, offsetZ * -1);
 			GL11.glRotatef(angleY * -1, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(angleZ * -1, 0.0F, 0.0F, 1.0F);
 			
 			GL11.glPopMatrix();
+			
+			if (pulling)
+			{
+				if (arrowStack == null)
+					arrowStack = new ItemStack(WEArcheryItems.specialarrow, 1, 1);
+				else
+					arrowStack = new ItemStack(arrowStack.getItem(), 1, arrowStack.getItemDamage());
+				
+				GL11.glPushMatrix();
+				
+				float arrowScale = 2.0f;
+				float arrowAngleZ = 75.0f;
+				offsetX = 0.42f;
+				offsetY = -0.43f;
+				offsetZ = 0.0f;
+				
+				if ((type == ItemRenderType.EQUIPPED || type == ItemRenderType.EQUIPPED_FIRST_PERSON) && flag)
+				{
+					arrowAngleZ -= 90.0f;
+					offsetX -= 0.31f;
+					offsetY += 0.44f;
+				}
+				
+				EntityItem arrow = new EntityItem(mc.theWorld, 0.0d, 0.0d, 0.0d, arrowStack);
+				arrow.hoverStart = 0.0f;
+				RenderItem.renderInFrame = true;
+				
+				GL11.glRotatef(arrowAngleZ, 0.0f, 0.0f, 1.0f);
+				GL11.glScalef(arrowScale, arrowScale, arrowScale);
+				GL11.glTranslatef(offsetX, offsetY, offsetZ);
+				RenderManager.instance.renderEntityWithPosYaw(arrow, 0.0d, 0.0d, 0.0d, 0.0f, 0.0f);
+				GL11.glTranslatef(-offsetX, -offsetY, -offsetZ);
+				GL11.glScalef(1.0f / arrowScale, 1.0f / arrowScale, 1.0f / arrowScale);
+				GL11.glRotatef(-arrowAngleZ, 0.0f, 0.0f, 1.0f);
+				
+				RenderItem.renderInFrame = false;
+				
+				GL11.glPopMatrix();
+			}
 			break;
 		case INVENTORY:
 			IIcon icon = stack.getItem().getIconFromDamage(0);

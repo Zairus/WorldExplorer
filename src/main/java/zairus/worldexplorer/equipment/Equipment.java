@@ -58,9 +58,9 @@ public class Equipment
 		GameRegistry.addShapedRecipe(
 				new ItemStack(WEEquipmentItems.spyglass)
 				, new Object[] {
-						"gpg"
-						,"iri"
-						,"gpg"
+						"gig"
+						,"prp"
+						,"gig"
 						,'g'
 						,Blocks.light_weighted_pressure_plate
 						,'p'
