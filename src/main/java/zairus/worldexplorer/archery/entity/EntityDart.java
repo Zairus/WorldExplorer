@@ -2,6 +2,8 @@ package zairus.worldexplorer.archery.entity;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -13,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -21,8 +24,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import zairus.worldexplorer.core.WorldExplorer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityDart
 	extends Entity
@@ -66,6 +67,7 @@ public class EntityDart
 	protected void entityInit()
 	{
 		this.dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+		this.dataWatcher.addObject(17, Integer.valueOf(0));
 	}
 	
 	public void setThrowableHeading(double p_70186_1_, double p_70186_3_, double p_70186_5_, float p_70186_7_, float p_70186_8_)
@@ -246,6 +248,9 @@ public class EntityDart
 							EnchantmentHelper.func_151384_a(entitylivingbase, this.shootingEntity);
 							EnchantmentHelper.func_151385_b((EntityLivingBase) this.shootingEntity, entitylivingbase);
 						}
+						
+						if (this.getEffectId() != 0)
+							entitylivingbase.addPotionEffect(new PotionEffect(this.getEffectId(), 200));
 						
 						if (this.shootingEntity != null
 								&& movingobjectposition.entityHit != this.shootingEntity
@@ -429,5 +434,15 @@ public class EntityDart
 	{
 		byte b0 = this.dataWatcher.getWatchableObjectByte(16);
 		return (b0 & 1) != 0;
+	}
+	
+	public void setEffectId(int effectId)
+	{
+		this.dataWatcher.updateObject(17, Integer.valueOf(effectId));
+	}
+	
+	public int getEffectId()
+	{
+		return this.dataWatcher.getWatchableObjectInt(17);
 	}
 }

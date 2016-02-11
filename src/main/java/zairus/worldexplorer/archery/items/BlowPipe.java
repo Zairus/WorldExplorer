@@ -1,5 +1,7 @@
 package zairus.worldexplorer.archery.items;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -28,6 +30,8 @@ public class BlowPipe
 		setMaxDamage(350);
 		
 		this.maxStackSize = 1;
+		
+		this.addAllowedAmmo(WEArcheryItems.dart);
 	}
 	
 	@Override
@@ -62,10 +66,22 @@ public class BlowPipe
 		
 		j = event.charge;
 		
-		boolean flag = player.capabilities.isCreativeMode;
+		boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+		boolean hasAmmo = false;
 		
-		if (flag || player.inventory.hasItem(WEArcheryItems.dart))
+		for (int i = 0; i < getAllowedAmmo().size(); ++i)
 		{
+			if(player.inventory.hasItem(getAllowedAmmo().get(i)))
+				hasAmmo = true;
+		}
+		
+		if (flag || hasAmmo)
+		{
+			ItemStack ammo = WEItemRanged.getAmmo(stack, player);
+			
+			if (player.capabilities.isCreativeMode && ammo == null)
+				ammo = new ItemStack(WEArcheryItems.dart, 1);
+			
 			float f = (float)j / 7.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 			
@@ -81,6 +97,14 @@ public class BlowPipe
 			
 			EntityDart dart = new EntityDart(world, player, f * 1.7F);
 			
+			if (ammo.hasTagCompound())
+			{
+				if (ammo.getTagCompound().hasKey(Dart.KEY_EFFECTID))
+				{
+					dart.setEffectId(ammo.getTagCompound().getInteger(Dart.KEY_EFFECTID));
+				}
+			}
+			
 			stack.damageItem(1, player);
 			
 			if (!world.isRemote)
@@ -88,7 +112,8 @@ public class BlowPipe
 			
 			if (!flag)
 			{
-				player.inventory.consumeInventoryItem(WEArcheryItems.dart);
+				if(player.inventory.hasItem(ammo.getItem()))
+					player.inventory.consumeInventoryItem(ammo.getItem());
 			}
 			
 			if (!world.isRemote)

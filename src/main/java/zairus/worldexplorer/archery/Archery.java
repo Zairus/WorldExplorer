@@ -1,5 +1,10 @@
 package zairus.worldexplorer.archery;
 
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,9 +12,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import zairus.worldexplorer.archery.client.renderer.ArcheryRenderManager;
 import zairus.worldexplorer.archery.entity.ArcheryEntityManager;
 import zairus.worldexplorer.archery.entity.monster.ArcheryMonsterManager;
+import zairus.worldexplorer.archery.items.Dart;
 import zairus.worldexplorer.archery.items.WEArcheryItems;
 import zairus.worldexplorer.core.IWEAddonEntityManager;
 import zairus.worldexplorer.core.IWEAddonMod;
@@ -19,11 +27,6 @@ import zairus.worldexplorer.core.WEConstants;
 import zairus.worldexplorer.core.WorldExplorer;
 import zairus.worldexplorer.core.items.WorldExplorerItems;
 import zairus.worldexplorer.equipment.items.WEEquipmentItems;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid=WEConstants.ARCHERY_MODID, name=WEConstants.ARCHERY_NAME, version=WEConstants.ARCHERY_VERSION, dependencies="required-before:" + WEConstants.CORE_MODID)
 public class Archery
@@ -189,6 +192,11 @@ public class Archery
 					,Items.string
 				});
 		
+		this.addDartRecipe(Potion.poison.id, "Poison", 8196);
+		this.addDartRecipe(Potion.weakness.id, "Weakness", 8200);
+		this.addDartRecipe(Potion.moveSlowdown.id, "Slowness", 8202);
+		this.addDartRecipe(Potion.harm.id, "Harming", 8204);
+		
 		GameRegistry.addShapedRecipe(
 				new ItemStack(WEArcheryItems.longbow_handle)
 				, new Object[] {
@@ -246,6 +254,29 @@ public class Archery
 				, new Object[] {
 					Items.stick
 					,Items.stick
+				});
+	}
+	
+	private void addDartRecipe(int effectId, String effectName, int potionDamage)
+	{
+		ItemStack effectDart;
+		
+		effectDart = new ItemStack(WEArcheryItems.dart, 8, 0);
+		effectDart.setTagCompound(new NBTTagCompound());
+		effectDart.getTagCompound().setBoolean(Dart.KEY_HASEFFECT, true);
+		effectDart.getTagCompound().setInteger(Dart.KEY_EFFECTID, effectId);
+		effectDart.getTagCompound().setString(Dart.KEY_EFFECTNAME, effectName);
+		
+		GameRegistry.addShapedRecipe(
+				effectDart
+				, new Object[] {
+					 "ddd"
+					,"dpd"
+					,"ddd"
+					,'d'
+					,WEArcheryItems.dart
+					,'p'
+					,new ItemStack(Items.potionitem, 1, potionDamage)
 				});
 	}
 	

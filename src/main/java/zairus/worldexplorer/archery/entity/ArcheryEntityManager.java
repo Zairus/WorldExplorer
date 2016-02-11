@@ -15,9 +15,9 @@ public final class ArcheryEntityManager
 	@Override
 	public void registerEntities()
 	{
-		WEEntityRegistry.registerEntity(EntityPebble.class, "entity_pebble", Archery.instance, 256, 3, true);
+		WEEntityRegistry.registerEntity(EntityPebble.class, "entity_pebble", Archery.instance, 256, 1, true);
 		WEEntityRegistry.registerEntity(EntityBoomerang.class, "entity_boomerang", Archery.instance, 512, 1, true);
-		WEEntityRegistry.registerEntity(EntityDart.class, "entity_dart", Archery.instance, 128, 3, true);
-		WEEntityRegistry.registerEntity(EntitySpecialArrow.class, "entity_specialarrow", Archery.instance, 128, 3, true);
+		WEEntityRegistry.registerEntity(EntityDart.class, "entity_dart", Archery.instance, 128, 1, true);
+		WEEntityRegistry.registerEntity(EntitySpecialArrow.class, "entity_specialarrow", Archery.instance, 64, 20, true);
 	}
 }

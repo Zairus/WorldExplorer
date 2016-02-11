@@ -77,7 +77,11 @@ public class SpecialArrow
 		
 		damagesource.damageType = "specialarrow";
 		
-		entity.attackEntityFrom(damagesource, 2.0F);
+		float damage = 2.0f;
+		
+		damage += stack.getItemDamage() * 1.05;
+		
+		entity.attackEntityFrom(damagesource, damage);
 		entity.playSound("random.bowhit", 1.1F, 1.2F / (player.worldObj.rand.nextFloat() * 0.2F + 0.9F));
 		
 		if (!player.capabilities.isCreativeMode)

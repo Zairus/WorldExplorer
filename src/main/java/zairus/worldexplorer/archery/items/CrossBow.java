@@ -152,6 +152,9 @@ public class CrossBow
 		{
 			ItemStack ammo = WEItemRanged.getAmmo(stack, player);
 			
+			if (player.capabilities.isCreativeMode && ammo == null)
+				ammo = new ItemStack(WEArcheryItems.specialarrow, 1, 1);
+			
 			float f = (float)j / 25.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 			
